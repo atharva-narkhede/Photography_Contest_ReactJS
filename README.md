@@ -20,31 +20,49 @@ The Photography Contest Website, developed using the MERN stack (MongoDB, Expres
 ## Screenshots
 
 ### Admin Dashboard
-![admin-dashboard](https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/229cb122-98aa-47a8-89e2-c8f5160d74bf)
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/229cb122-98aa-47a8-89e2-c8f5160d74bf" alt="admin-dashboard" width="400"/>
+</p>
 
 ### Manage Contest
-![manage-contest](https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/4f3ac6f9-7bb0-4df2-bed9-b77972484705)
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/4f3ac6f9-7bb0-4df2-bed9-b77972484705" alt="manage-contest" width="400"/>
+</p>
 
 ### Admin Create Contest
-![admin-create-contest](https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/6a4d2b39-4dd1-4abb-b8fe-b4b5439d7e63)
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/6a4d2b39-4dd1-4abb-b8fe-b4b5439d7e63" alt="admin-create-contest" width="400"/>
+</p>
 
 ### Ongoing Contest Page
-![ongoing-contest-page](https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/4001a1ee-c99a-4d1d-9ff0-987712ff9178)
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/4001a1ee-c99a-4d1d-9ff0-987712ff9178" alt="ongoing-contest-page" width="400"/>
+</p>
 
 ### Past Contest Page
-![pastcontest-page](https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/50fbcd8b-3877-4ded-93b0-7337bbba99a5)
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/50fbcd8b-3877-4ded-93b0-7337bbba99a5" alt="pastcontest-page" width="400"/>
+</p>
 
 ### Winner from Past Contest
-![winner-from-past-contest](https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/f4e7ea22-f2bb-4ce4-8109-e1264fe10f63)
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/f4e7ea22-f2bb-4ce4-8109-e1264fe10f63" alt="winner-from-past-contest" width="400"/>
+</p>
 
 ### User Homepage
-![user-homepage](https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/86b7aafd-dba1-4e73-98f3-c95176c1f14d)
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/86b7aafd-dba1-4e73-98f3-c95176c1f14d" alt="user-homepage" width="400"/>
+</p>
 
 ### User Join Contest
-![user-join-contest](https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/781705af-1518-4b3b-9de3-8972cdc024d3)
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/781705af-1518-4b3b-9de3-8972cdc024d3" alt="user-join-contest" width="400"/>
+</p>
 
 ### User View Contest and Vote
-![user-view-contest-and-vote](https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/56cfbc37-d852-4475-b4ba-f904c0b7a7d1)
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/56cfbc37-d852-4475-b4ba-f904c0b7a7d1" alt="user-view-contest-and-vote" width="400"/>
+</p>
 
 ## Getting Started
 
