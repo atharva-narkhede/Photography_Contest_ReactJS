@@ -43,29 +43,17 @@ const AdminDashboard = () => {
         setNewContest({ ...newContest, [name]: value });
     };
 
-    // const handleCreateContest = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         await axios.post(`${url}/contests/insert`, newContest);
-    //         setNewContest({ title: '', description: '', start_date: '', end_date: '' });
-    //         fetchContests();
-    //         setShowCreateModal(false);
-    //         alert("Contest Added");
 
-    //     } catch (error) {
-    //         console.error('Error creating contest:', error);
-    //     }
-    // };
     const handleCreateContest = async (e) => {
         e.preventDefault();
-    
+
         // Check if the contest with the same title already exists
         const existingContest = contests.find(contest => contest.title === newContest.title);
         if (existingContest) {
             alert(`Contest with title "${newContest.title}" already exists.`);
             return;
         }
-    
+
         try {
             // If the contest title doesn't exist, proceed to create it
             await axios.post(`${url}/contests/insert`, newContest);
@@ -78,12 +66,12 @@ const AdminDashboard = () => {
             alert("Error creating contest. Please try again.");
         }
     };
-    
+
 
     const handleDeleteContest = async (contest) => {
         try {
             console.log("DELETING CONTEST", contest.title);
-    
+
             // Delete contest
             try {
                 await axios.delete(`${url}/contests/delete`, {
@@ -95,7 +83,7 @@ const AdminDashboard = () => {
             } catch (error) {
                 console.error('Error deleting contest:', error);
             }
-    
+
             // Delete associated votes
             try {
                 await axios.delete(`${url}/votes/delete`, {
@@ -107,7 +95,7 @@ const AdminDashboard = () => {
             } catch (error) {
                 console.error('Error deleting votes:', error);
             }
-    
+
             // Delete all photos related to the contest
             try {
                 await axios.delete(`${url}/photos/deleteall`, {
@@ -119,17 +107,17 @@ const AdminDashboard = () => {
             } catch (error) {
                 console.error('Error deleting photos:', error);
             }
-    
+
             // Fetch contests again (assuming fetchContests is a function that does this)
             fetchContests();
-    
+
             // Hide delete modal after successful deletion
             setShowDeleteModal(false);
         } catch (error) {
             console.error('General error during deletion:', error);
         }
     };
-    
+
 
     const handleEditContest = (contest) => {
         setEditContest(contest);
