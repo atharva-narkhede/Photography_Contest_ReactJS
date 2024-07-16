@@ -17,7 +17,7 @@ const AdminContestPhotos = ({ contest, show, onHide }) => {
     const fetchPhotos = async () => {
         try {
             setLoadingPhotos(true);
-            
+
             const photosResponse = await axios.get(`${url}/photos/fetch`);
             const filteredPhotos = photosResponse.data.filter(photo => photo.contest_title === contest.title);
             setPhotos(filteredPhotos);
@@ -31,7 +31,7 @@ const AdminContestPhotos = ({ contest, show, onHide }) => {
     const handleDeletePhoto = async (photo) => {
         try {
             setLoadingDelete(true);
-            
+
 
             // Example: deleting photo and votes
             await axios.delete(`${url}/photos/delete`, {
@@ -40,8 +40,8 @@ const AdminContestPhotos = ({ contest, show, onHide }) => {
                     uploaded_by: photo.uploaded_by
                 }
             });
-            
-            
+
+
         } catch (error) {
             console.error('Error deleting photo:', error);
         } try {
@@ -54,7 +54,7 @@ const AdminContestPhotos = ({ contest, show, onHide }) => {
         } catch (error) {
             console.error('Error deleting votes:', error);
 
-        } 
+        }
         // Refresh photos after deletion
         fetchPhotos();
         setLoadingDelete(false);
@@ -115,3 +115,4 @@ const AdminContestPhotos = ({ contest, show, onHide }) => {
 };
 
 export default AdminContestPhotos;
+

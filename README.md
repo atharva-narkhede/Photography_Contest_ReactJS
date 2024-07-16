@@ -1,70 +1,163 @@
-# Getting Started with Create React App
+# Photography Contest Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+The Photography Contest Website, developed using the MERN stack (MongoDB, Express.js, React.js, Node.js), facilitates seamless participation for photographers in contests through user-friendly interfaces for photo uploads, voting, and contest management. Admins efficiently oversee contests with features for creation, updating, and deletion, ensuring smooth photo management. The platform fosters community engagement and talent showcasing, enhancing user experience and fostering a vibrant photography community.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+### User Features
+- **Registration and Login**: Users can register and log in to participate in contests.
+- **Join Contests**: Users can join ongoing contests and upload their photographs.
+- **Voting**: Users can view contest entries and cast one vote per contest.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Admin Features
+- **Admin Login**: Admins have a separate login interface.
+- **Contest Management**: Admins can create, edit, and delete contests.
+- **Photo Management**: Admins can view all entries in a contest and delete any inappropriate images.
+- **Voting**: Admins can also vote in contests if desired.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Screenshots
 
-### `npm test`
+### Admin Dashboard
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/229cb122-98aa-47a8-89e2-c8f5160d74bf" alt="admin-dashboard" width="400"/>
+</p>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Manage Contest
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/4f3ac6f9-7bb0-4df2-bed9-b77972484705" alt="manage-contest" width="400"/>
+</p>
 
-### `npm run build`
+### Admin Create Contest
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/6a4d2b39-4dd1-4abb-b8fe-b4b5439d7e63" alt="admin-create-contest" width="400"/>
+</p>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Ongoing Contest Page
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/4001a1ee-c99a-4d1d-9ff0-987712ff9178" alt="ongoing-contest-page" width="400"/>
+</p>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Past Contest Page
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/50fbcd8b-3877-4ded-93b0-7337bbba99a5" alt="pastcontest-page" width="400"/>
+</p>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Winner from Past Contest
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/f4e7ea22-f2bb-4ce4-8109-e1264fe10f63" alt="winner-from-past-contest" width="400"/>
+</p>
 
-### `npm run eject`
+### User Homepage
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/86b7aafd-dba1-4e73-98f3-c95176c1f14d" alt="user-homepage" width="400"/>
+</p>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### User Join Contest
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/781705af-1518-4b3b-9de3-8972cdc024d3" alt="user-join-contest" width="400"/>
+</p>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### User View Contest and Vote
+<p align="center">
+  <img src="https://github.com/atharva-narkhede/Photography_Contest_ReactJS/assets/106006803/56cfbc37-d852-4475-b4ba-f904c0b7a7d1" alt="user-view-contest-and-vote" width="400"/>
+</p>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Getting Started
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Prerequisites
+- Node.js
+- MongoDB
 
-## Learn More
+### Installation
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/atharva-narkhede/Photography_Contest_ReactJS.git
+   cd Photography_Contest_ReactJS
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-### Code Splitting
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and add your MongoDB URI and other necessary configurations.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+4. **Start the development server:**
+   ```bash
+   npm start
+   ```
 
-### Analyzing the Bundle Size
+### Backend Repository
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The backend of this React app is in a separate repository: [Photography Contest Backend](https://github.com/atharva-narkhede/Photography_Contest_Backend). The backend is hosted on Render.com and is used as an API in the above React app for CRUD operations.
 
-### Making a Progressive Web App
+### Backend Repository Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+To get a local copy of the backend up and running, follow these simple steps:
 
-### Advanced Configuration
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/atharva-narkhede/Photography_Contest_Backend.git
+   cd Photography_Contest_Backend
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-### Deployment
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and add your MongoDB URI and server port:
+   ```sh
+   PORT=5000
+   MONGO_URI=your_mongodb_connection_string
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
 
-### `npm run build` fails to minify
+The server will start on `http://localhost:5000`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Contributing
+
+1. **Fork the repository.**
+
+2. **Create a new branch:**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Make your changes and commit them:**
+   ```bash
+   git commit -m 'Add some feature'
+   ```
+
+4. **Push to the branch:**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+5. **Create a pull request.**
+
+## Links
+
+- **Live Website**: [Photography Contest Website](https://photography-contest-a6a50.web.app)
+- **Frontend Repository**: [Photography Contest ReactJS](https://github.com/atharva-narkhede/Photography_Contest_ReactJS)
+- **Backend Repository**: [Photography Contest Backend](https://github.com/atharva-narkhede/Photography_Contest_Backend)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- MERN stack documentation and community.
+- Contributors and users for their feedback and support.
+
+Feel free to contribute and enhance this project to support a thriving photography community!

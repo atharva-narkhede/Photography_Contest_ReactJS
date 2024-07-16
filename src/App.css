@@ -1,5 +1,6 @@
 body {
   font-family: Arial, sans-serif;
+  padding-top: 70px; /* Add this line to ensure content is not hidden behind the navbar */
 }
 
 nav ul {
@@ -29,3 +30,4 @@ h1 {
 button {
   cursor: pointer;
 }
+
