@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Carousel } from 'react-bootstrap';
+import { UserAuthContext } from '../context/UserAuthContext';
+import { AdminAuthContext } from '../context/AdminAuthContext';
 
 const HomePage = () => {
+    const { user } = useContext(UserAuthContext);
+    const { admin } = useContext(AdminAuthContext);
+
+    const getWelcomeMessage = () => {
+        if (admin) {
+            return `Welcome, ${admin.username}!`;
+        } else if (user) {
+            return `Welcome, ${user.username}!`;
+        } else {
+            return 'Welcome, Photographer!';
+        }
+    };
+
     return (
         <div className="container text-center">
             <style>
@@ -29,12 +44,7 @@ const HomePage = () => {
 
             <h1 className='page-text'>Welcome to the Photography Contest Platform</h1>
             <p className="lead">
-                <span className="welcome-text">
-                    Welcome,
-                </span> 
-                <span className="welcome-text">
-                    {sessionStorage.getItem("username") ? sessionStorage.getItem("username")+"!" : 'Photographer!'}
-                </span>
+                <span className="welcome-text">{getWelcomeMessage()}</span>
             </p>
             <p className="lead page-text">
                 Join our contests, upload your best photos, and vote for your favorites!

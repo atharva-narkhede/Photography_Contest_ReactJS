@@ -1,64 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button, ToggleButtonGroup, ToggleButton, Modal, Form, Spinner } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
-import url from "../url";
 import ContestPhotos from './ContestPhotos';
 import PastContestPhotos from './PastContestPhotos';
+import { UserAuthContext } from '../context/UserAuthContext';
+import { AdminAuthContext } from '../context/AdminAuthContext';
 
 // Axios configuration with interceptors
 let spinnerCounter = 0;
 
 const showSpinner = () => {
-  spinnerCounter++;
-  if (spinnerCounter === 1) {
-    const spinnerElement = document.createElement('div');
-    spinnerElement.id = 'spinner-overlay';
-    spinnerElement.style.position = 'fixed';
-    spinnerElement.style.top = '0';
-    spinnerElement.style.left = '0';
-    spinnerElement.style.width = '100%';
-    spinnerElement.style.height = '100%';
-    spinnerElement.style.display = 'flex';
-    spinnerElement.style.justifyContent = 'center';
-    spinnerElement.style.alignItems = 'center';
-    spinnerElement.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-    document.body.appendChild(spinnerElement);
+    spinnerCounter++;
+    if (spinnerCounter === 1) {
+        const spinnerElement = document.createElement('div');
+        spinnerElement.id = 'spinner-overlay';
+        spinnerElement.style.position = 'fixed';
+        spinnerElement.style.top = '0';
+        spinnerElement.style.left = '0';
+        spinnerElement.style.width = '100%';
+        spinnerElement.style.height = '100%';
+        spinnerElement.style.display = 'flex';
+        spinnerElement.style.justifyContent = 'center';
+        spinnerElement.style.alignItems = 'center';
+        spinnerElement.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+        document.body.appendChild(spinnerElement);
 
-    ReactDOM.render(<Spinner animation="border" role="status"><span className="sr-only"></span></Spinner>, spinnerElement);
-  }
+        ReactDOM.render(<Spinner animation="border" role="status"><span className="sr-only"></span></Spinner>, spinnerElement);
+    }
 };
 
 const hideSpinner = () => {
-  spinnerCounter--;
-  if (spinnerCounter === 0) {
-    const spinnerElement = document.getElementById('spinner-overlay');
-    if (spinnerElement) {
-      ReactDOM.unmountComponentAtNode(spinnerElement);
-      document.body.removeChild(spinnerElement);
+    spinnerCounter--;
+    if (spinnerCounter === 0) {
+        const spinnerElement = document.getElementById('spinner-overlay');
+        if (spinnerElement) {
+            ReactDOM.unmountComponentAtNode(spinnerElement);
+            document.body.removeChild(spinnerElement);
+        }
     }
-  }
 };
 
 // Request interceptor
 axios.interceptors.request.use(request => {
-  showSpinner();
-  return request;
+    showSpinner();
+    return request;
 }, error => {
-  hideSpinner();
-  return Promise.reject(error);
+    hideSpinner();
+    return Promise.reject(error);
 });
 
 // Response interceptor
 axios.interceptors.response.use(response => {
-  hideSpinner();
-  return response;
+    hideSpinner();
+    return response;
 }, error => {
-  hideSpinner();
-  return Promise.reject(error);
+    hideSpinner();
+    return Promise.reject(error);
 });
 
 const ViewContests = () => {
+    const { user } = useContext(UserAuthContext);
+    const { admin } = useContext(AdminAuthContext);
+
+    const loggedInUser = user ? user.email : (admin ? admin.email : null);
+    const loggedInUsername = user ? user.username : (admin ? admin.username : null);
+
     const [contests, setContests] = useState([]);
     const [filter, setFilter] = useState("ongoing"); // Default to ongoing contests
     const [selectedContest, setSelectedContest] = useState(null);
@@ -66,6 +73,7 @@ const ViewContests = () => {
     const [modalData, setModalData] = useState({
         contest_title: '',
         uploaded_by: '',
+        email: '',
         photo_url: ''
     });
     const [userPhotos, setUserPhotos] = useState([]);
@@ -76,11 +84,14 @@ const ViewContests = () => {
     const [file, setFile] = useState(null);
     const [fileError, setFileError] = useState('');
 
-    const user = sessionStorage.getItem('u_email');
-
     useEffect(() => {
         // Fetch the contest data
-        axios.get(url + '/contests/fetch')
+        axios.get(`${process.env.REACT_APP_API_URL}/api/contests/fetch`, {
+            headers: {
+                'x-api-key': process.env.REACT_APP_API_KEY,
+            },
+            withCredentials: true,
+        })
             .then(response => {
                 if (response.status === 200) {
                     setContests(response.data);
@@ -94,11 +105,18 @@ const ViewContests = () => {
             .finally(() => setLoading(false)); // Stop loading spinner
 
         // Fetch the user's photos
-        if (user) {
-            axios.get(url + '/photos/fetch')
+        if (loggedInUser) {
+            axios.get(`${process.env.REACT_APP_API_URL}/api/photos/fetch`, {
+                headers: {
+                    'x-api-key': process.env.REACT_APP_API_KEY,
+                },
+                withCredentials: true,
+            })
                 .then(response => {
+                    
                     if (response.status === 200) {
-                        setUserPhotos(response.data.filter(photo => photo.uploaded_by === user));
+                        console.log("PHOTOS LOADED")
+                        setUserPhotos(response.data.filter(photo => photo.email === loggedInUser));
                     } else {
                         console.error('Error fetching photos: ', response.status);
                     }
@@ -107,7 +125,7 @@ const ViewContests = () => {
                     console.error('There was an error fetching the photos!', error);
                 });
         }
-    }, [user]);
+    }, [loggedInUser]);
 
     const today = new Date();
 
@@ -122,14 +140,15 @@ const ViewContests = () => {
 
     const handleJoinClick = (contest) => {
         // Ensure userPhotos is updated and contains the current user's photos
-        const existingPhoto = userPhotos.find(photo => photo.contest_title === contest.title && photo.uploaded_by === user);
+        const existingPhoto = userPhotos.find(photo => photo.contest_title === contest.title && photo.email === loggedInUser);
         if (existingPhoto) {
             alert("You have already participated in this contest.");
             return;
         }
         setModalData({
             contest_title: contest.title,
-            uploaded_by: user, // Use session data
+            uploaded_by: loggedInUsername, // Use context data
+            email: loggedInUser, // Use context data
             photo_url: ''
         });
         setShowModal(true);
@@ -182,9 +201,14 @@ const ViewContests = () => {
                     const imgUrl = response.data.data.url;
 
                     // Submit modalData to backend using imgUrl
-                    axios.post(url + "/photos/insert", {
+                    axios.post(`${process.env.REACT_APP_API_URL}/api/photos/insert`, {
                         ...modalData,
                         photo_url: imgUrl  // Update photo_url with imgUrl
+                    }, {
+                        headers: {
+                            'x-api-key': process.env.REACT_APP_API_KEY,
+                        },
+                        withCredentials: true,
                     })
                         .then(response => {
                             if (response.status === 200) {
@@ -307,6 +331,10 @@ const ViewContests = () => {
                         <Form.Group controlId="formUploadedBy" className="mt-3">
                             <Form.Label>Uploaded By</Form.Label>
                             <Form.Control type="text" name="uploaded_by" value={modalData.uploaded_by} readOnly />
+                        </Form.Group>
+                        <Form.Group controlId="formEmail" className="mt-3">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="text" name="email" value={modalData.email} readOnly />
                         </Form.Group>
                         <Form.Group controlId="formPhotoFile" className="mt-3">
                             <Form.Label>Upload Photo</Form.Label>

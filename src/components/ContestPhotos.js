@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button, Spinner } from 'react-bootstrap';
-import url from "../url";
+import { UserAuthContext } from '../context/UserAuthContext';
+import { AdminAuthContext } from '../context/AdminAuthContext';
 
 const ContestPhotos = ({ contestTitle, onBack }) => {
     const [photos, setPhotos] = useState([]);
@@ -9,15 +10,37 @@ const ContestPhotos = ({ contestTitle, onBack }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const { user } = useContext(UserAuthContext);
+    const { admin } = useContext(AdminAuthContext);
+
+    const loggedInEmail = user?.email || admin?.email;
+
     useEffect(() => {
         const fetchPhotosAndVotes = async () => {
             try {
-                const photosResponse = await axios.get(url + "/photos/fetch");
+                // Fetch photos related to the contest
+                const photosResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/photos/fetch`, {
+                    headers: {
+                        'x-api-key': process.env.REACT_APP_API_KEY,
+                    },
+                    withCredentials: true,
+                });
+
                 const filteredPhotos = photosResponse.data.filter(photo => photo.contest_title === contestTitle);
                 setPhotos(filteredPhotos);
 
-                const votesResponse = await axios.get(url + "/votes/fetch");
-                const userVote = votesResponse.data.find(vote => vote.voted_by === sessionStorage.getItem("u_email") && vote.contest_title === contestTitle);
+                // Fetch user votes
+                const votesResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/votes/fetch`, {
+                    headers: {
+                        'x-api-key': process.env.REACT_APP_API_KEY,
+                    },
+                    withCredentials: true,
+                });
+
+                const userVote = votesResponse.data.find(vote => 
+                    vote.email === loggedInEmail && vote.contest_title === contestTitle
+                );
+
                 if (userVote) {
                     setVotedPhoto(userVote.photo_url);
                 }
@@ -30,7 +53,7 @@ const ContestPhotos = ({ contestTitle, onBack }) => {
         };
 
         fetchPhotosAndVotes();
-    }, [contestTitle]);
+    }, [contestTitle, loggedInEmail]);
 
     const handleVote = async (photoUrl) => {
         if (votedPhoto) {
@@ -39,10 +62,15 @@ const ContestPhotos = ({ contestTitle, onBack }) => {
         }
 
         try {
-            const response = await axios.post(url + "/votes/insert", {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/votes/insert`, {
                 photo_url: photoUrl,
-                voted_by: sessionStorage.getItem("u_email"),
+                email: loggedInEmail,
                 contest_title: contestTitle
+            }, {
+                headers: {
+                    'x-api-key': process.env.REACT_APP_API_KEY,
+                },
+                withCredentials: true,
             });
 
             setVotedPhoto(photoUrl);
@@ -65,8 +93,8 @@ const ContestPhotos = ({ contestTitle, onBack }) => {
                             <Card.Img variant="top" src={photo.photo_url} />
                             <Card.Body>
                                 <Card.Text>Uploaded by: {photo.uploaded_by}</Card.Text>
-                                <Button 
-                                    variant={votedPhoto === photo.photo_url ? "success" : "primary"} 
+                                <Button
+                                    variant={votedPhoto === photo.photo_url ? "success" : "primary"}
                                     onClick={() => handleVote(photo.photo_url)}
                                     disabled={!!votedPhoto} // Disable button if a vote is already given
                                 >

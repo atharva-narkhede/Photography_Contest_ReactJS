@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import url from "../url"; // Replace with your API URL
 import { Modal, Button } from 'react-bootstrap';
-import AdminContestPhotos from './AdminContestPhotos'; // Import the new component
+import AdminContestPhotos from './AdminContestPhotos';
+import { AdminAuthContext } from '../context/AdminAuthContext';
 
 const AdminDashboard = () => {
     const [contests, setContests] = useState([]);
@@ -19,8 +19,9 @@ const AdminDashboard = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [contestToDelete, setContestToDelete] = useState(null);
     const [viewContest, setViewContest] = useState(null); // State for viewing contest photos
+
+    const { admin } = useContext(AdminAuthContext); // Use admin context for authentication
     const navigate = useNavigate();
-    const admin = true; // Replace with actual admin status check
 
     useEffect(() => {
         if (!admin) {
@@ -31,7 +32,12 @@ const AdminDashboard = () => {
 
     const fetchContests = async () => {
         try {
-            const response = await axios.get(`${url}/contests/fetch`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/contests/fetch`, {
+                headers: {
+                    'x-api-key': process.env.REACT_APP_API_KEY,
+                },
+                withCredentials: true,
+            });
             setContests(response.data);
         } catch (error) {
             console.error('Error fetching contests:', error);
@@ -42,7 +48,6 @@ const AdminDashboard = () => {
         const { name, value } = e.target;
         setNewContest({ ...newContest, [name]: value });
     };
-
 
     const handleCreateContest = async (e) => {
         e.preventDefault();
@@ -56,7 +61,12 @@ const AdminDashboard = () => {
 
         try {
             // If the contest title doesn't exist, proceed to create it
-            await axios.post(`${url}/contests/insert`, newContest);
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/contests/insert`, newContest, {
+                headers: {
+                    'x-api-key': process.env.REACT_APP_API_KEY,
+                },
+                withCredentials: true,
+            });
             setNewContest({ title: '', description: '', start_date: '', end_date: '' });
             fetchContests(); // Fetch contests again to update the list
             setShowCreateModal(false);
@@ -67,57 +77,54 @@ const AdminDashboard = () => {
         }
     };
 
-
     const handleDeleteContest = async (contest) => {
         try {
-            console.log("DELETING CONTEST", contest.title);
-
             // Delete contest
             try {
-                await axios.delete(`${url}/contests/delete`, {
-                    data: {
-                        title: contest.title
-                    }
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/contests/delete`, {
+                    data: { title: contest.title },
+                    headers: {
+                        'x-api-key': process.env.REACT_APP_API_KEY,
+                    },
+                    withCredentials: true,
                 });
-                console.log("DONE DELETING CONTEST");
             } catch (error) {
                 console.error('Error deleting contest:', error);
             }
 
             // Delete associated votes
             try {
-                await axios.delete(`${url}/votes/delete`, {
-                    data: {
-                        contest_title: contest.title
-                    }
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/votes/delete`, {
+                    data: { contest_title: contest.title },
+                    headers: {
+                        'x-api-key': process.env.REACT_APP_API_KEY,
+                    },
+                    withCredentials: true,
                 });
-                console.log("DONE DELETING VOTES");
             } catch (error) {
                 console.error('Error deleting votes:', error);
             }
 
             // Delete all photos related to the contest
             try {
-                await axios.delete(`${url}/photos/deleteall`, {
-                    data: {
-                        contest_title: contest.title
-                    }
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/photos/deleteall`, {
+                    data: { contest_title: contest.title },
+                    headers: {
+                        'x-api-key': process.env.REACT_APP_API_KEY,
+                    },
+                    withCredentials: true,
                 });
-                console.log("DONE DELETING PHOTOS");
             } catch (error) {
                 console.error('Error deleting photos:', error);
             }
 
-            // Fetch contests again (assuming fetchContests is a function that does this)
+            // Refresh contest list
             fetchContests();
-
-            // Hide delete modal after successful deletion
             setShowDeleteModal(false);
         } catch (error) {
             console.error('General error during deletion:', error);
         }
     };
-
 
     const handleEditContest = (contest) => {
         setEditContest(contest);
@@ -132,11 +139,17 @@ const AdminDashboard = () => {
     const handleUpdateContest = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`${url}/contests/update`, {
+            console.log(editContest.title,editContest.description,editContest.start_date,editContest.end_date)
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/contests/update`, {
                 title: editContest.title,
                 description: editContest.description,
                 start_date: editContest.start_date,
                 end_date: editContest.end_date
+            }, {
+                headers: {
+                    'x-api-key': process.env.REACT_APP_API_KEY,
+                },
+                withCredentials: true,
             });
             setEditContest(null);
             fetchContests();

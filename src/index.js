@@ -1,10 +1,16 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client'; // Import createRoot
 import App from './App';
-import './App.css';
+import { AdminAuthProvider } from './context/AdminAuthContext';
+import { UserAuthProvider } from './context/UserAuthContext';
 
-ReactDOM.render(
-  <App/>,
-  document.getElementById('root')
+const container = document.getElementById('root');
+const root = createRoot(container); // Create a root
+
+root.render(
+  <AdminAuthProvider>
+    <UserAuthProvider>
+      <App />
+    </UserAuthProvider>
+  </AdminAuthProvider>
 );

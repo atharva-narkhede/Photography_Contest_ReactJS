@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import url from "../url"; // Replace with your API URL
 
 const AdminContestPhotos = ({ contest, show, onHide }) => {
     const [photos, setPhotos] = useState([]);
@@ -18,7 +17,12 @@ const AdminContestPhotos = ({ contest, show, onHide }) => {
         try {
             setLoadingPhotos(true);
 
-            const photosResponse = await axios.get(`${url}/photos/fetch`);
+            const photosResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/photos/fetch`, {
+                headers: {
+                    'x-api-key': process.env.REACT_APP_API_KEY,
+                },
+                withCredentials: true,
+            });
             const filteredPhotos = photosResponse.data.filter(photo => photo.contest_title === contest.title);
             setPhotos(filteredPhotos);
         } catch (error) {
@@ -32,34 +36,39 @@ const AdminContestPhotos = ({ contest, show, onHide }) => {
         try {
             setLoadingDelete(true);
 
-
-            // Example: deleting photo and votes
-            await axios.delete(`${url}/photos/delete`, {
+            // Deleting the photo
+            await axios.delete(`${process.env.REACT_APP_API_URL}/api/photos/delete`, {
                 data: {
                     contest_title: contest.title,
-                    uploaded_by: photo.uploaded_by
-                }
+                    email: photo.email
+                },
+                headers: {
+                    'x-api-key': process.env.REACT_APP_API_KEY,
+                },
+                withCredentials: true,
             });
+            console.log("DELETED PHOTO")
 
-
-        } catch (error) {
-            console.error('Error deleting photo:', error);
-        } try {
-            await axios.delete(`${url}/votes/deleteimage`, {
+            // Deleting associated votes for the photo
+            await axios.delete(`${process.env.REACT_APP_API_URL}/api/votes/deleteimage`, {
                 data: {
                     photo_url: photo.photo_url
-                }
+                },
+                headers: {
+                    'x-api-key': process.env.REACT_APP_API_KEY,
+                },
+                withCredentials: true,
             });
+            console.log("DELETED VOTES ON THAT PHOTO")
 
+            // Refresh photos after deletion
+            fetchPhotos();
         } catch (error) {
-            console.error('Error deleting votes:', error);
-
+            console.error('Error deleting photo or associated votes:', error);
+        } finally {
+            setLoadingDelete(false);
         }
-        // Refresh photos after deletion
-        fetchPhotos();
-        setLoadingDelete(false);
     };
-
 
     return (
         <Modal show={show} onHide={onHide}>
@@ -115,4 +124,3 @@ const AdminContestPhotos = ({ contest, show, onHide }) => {
 };
 
 export default AdminContestPhotos;
-

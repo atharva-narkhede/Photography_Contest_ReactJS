@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button, Spinner } from 'react-bootstrap';
-import url from "../url";
+import { UserAuthContext } from '../context/UserAuthContext';
+import { AdminAuthContext } from '../context/AdminAuthContext';
 
 const PastContestPhotos = ({ contestTitle, onBack }) => {
     const [photos, setPhotos] = useState([]);
@@ -10,10 +11,21 @@ const PastContestPhotos = ({ contestTitle, onBack }) => {
     const [error, setError] = useState(null);
     const [voteCounts, setVoteCounts] = useState({});
 
+    const { user } = useContext(UserAuthContext);
+    const { admin } = useContext(AdminAuthContext);
+
+    const loggedInEmail = user?.email || admin?.email;
+
     useEffect(() => {
         const fetchVotesAndPhotos = async () => {
             try {
-                const votesResponse = await axios.get(url + "/votes/fetch");
+                // Fetch votes related to the contest
+                const votesResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/votes/fetch`, {
+                    headers: {
+                        'x-api-key': process.env.REACT_APP_API_KEY,
+                    },
+                    withCredentials: true,
+                });
                 const votes = votesResponse.data.filter(vote => vote.contest_title === contestTitle);
 
                 let winnerPhoto = null;
@@ -31,7 +43,12 @@ const PastContestPhotos = ({ contestTitle, onBack }) => {
                     const winnerPhotoUrl = Object.keys(voteCounts).reduce((a, b) => voteCounts[a] > voteCounts[b] ? a : b);
 
                     // Fetch all photos for the contest
-                    const photosResponse = await axios.get(url + "/photos/fetch");
+                    const photosResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/photos/fetch`, {
+                        headers: {
+                            'x-api-key': process.env.REACT_APP_API_KEY,
+                        },
+                        withCredentials: true,
+                    });
                     const filteredPhotos = photosResponse.data.filter(photo => photo.contest_title === contestTitle);
                     setPhotos(filteredPhotos);
 
@@ -39,7 +56,12 @@ const PastContestPhotos = ({ contestTitle, onBack }) => {
                     winnerPhoto = filteredPhotos.find(photo => photo.photo_url === winnerPhotoUrl);
                 } else {
                     // Fetch all photos for the contest if no votes
-                    const photosResponse = await axios.get(url + "/photos/fetch");
+                    const photosResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/photos/fetch`, {
+                        headers: {
+                            'x-api-key': process.env.REACT_APP_API_KEY,
+                        },
+                        withCredentials: true,
+                    });
                     const filteredPhotos = photosResponse.data.filter(photo => photo.contest_title === contestTitle);
                     setPhotos(filteredPhotos);
                 }
